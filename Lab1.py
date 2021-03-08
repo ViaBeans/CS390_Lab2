@@ -20,7 +20,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 ALGORITHM = "tf_conv"
 
 DATASET = "mnist_d"
-# DATASET = "mnist_f"
+#DATASET = "mnist_f"
 # DATASET = "cifar_10"
 # DATASET = "cifar_100_f"
 # DATASET = "cifar_100_c"
@@ -82,29 +82,28 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
     model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu'))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
     model.add(tf.keras.layers.BatchNormalization())
-    if dropout:
-        model.add(tf.keras.layers.Dropout(dropRate))
 
-    model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
     model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
     model.add(tf.keras.layers.BatchNormalization())
+
+    model.add(tf.keras.layers.Flatten())
+
+    model.add(tf.keras.layers.Dense(1024, activation='relu'))
+    model.add(tf.keras.layers.BatchNormalization())
     if dropout:
         model.add(tf.keras.layers.Dropout(dropRate))
 
-    model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(2048, activation='relu'))
-    model.add(tf.keras.layers.BatchNormalization())
-    if dropout:
-        model.add(tf.keras.layers.Dropout(dropRate/2))
     model.add(tf.keras.layers.Dense(128, activation='relu'))
     model.add(tf.keras.layers.BatchNormalization())
+    if dropout:
+        model.add(tf.keras.layers.Dropout(dropRate))
 
     model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
     lt = keras.losses.categorical_crossentropy
     model.compile(optimizer='adam',
                   loss=lt, metrics=['accuracy'])
-    model.fit(x, y, eps)
+    model.fit(x, y, batch_size=30, epochs=eps)
 
     return model
 
