@@ -20,22 +20,26 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # ALGORITHM = "tf_net"
 ALGORITHM = "tf_conv"
 
-# DATASET = "mnist_d"
+DATASET = "mnist_d"
 # DATASET = "mnist_f"
 # DATASET = "cifar_10"
-DATASET = "cifar_100_f"
+#DATASET = "cifar_100_f"
 # DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
     IH = 28
     IW = 28
+    NIH = 28
+    NIW = 28
     IZ = 1
     IS = 784
 elif DATASET == "mnist_f":
     NUM_CLASSES = 10
     IH = 28
     IW = 28
+    NIH = 28
+    NIW = 28
     IZ = 1
     IS = 784
 elif DATASET == "cifar_10":
@@ -66,11 +70,30 @@ elif DATASET == "cifar_100_c":
 IF_CROP = True
 
 
-def random_crop(image):
-    cropped_image = tf.image.random_crop(
-        image, size=[NIH, NIW, IZ])
+def cifar_preprocess(images, outputs):
+    if IF_CROP:
+        A = np.zeros((images.shape[0] * 3, NIH, NIW, IZ))
+        B = np.zeros((outputs.shape[0] * 3, NUM_CLASSES))
 
-    return cropped_image
+        count = 0
+        for i in range(0, A.shape[0], 3):
+            A[i] = tf.image.random_crop(
+                images[count], size=[NIH, NIW, IZ])
+            B[i] = outputs[count]
+
+            A[i+1] = tf.image.random_crop(
+                images[count], size=[NIH, NIW, IZ])
+            B[i+1] = outputs[count]
+
+            A[i+2] = tf.image.random_crop(
+                images[count], size=[NIH, NIW, IZ])
+            B[i+2] = outputs[count]
+
+            count += 1
+
+        return A, B
+    else:
+        return images, outputs
 
 
 # =========================<Classifier Functions>================================
@@ -102,10 +125,15 @@ def buildTFNeuralNet(x, y, eps=6):
 
 
 def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
+    if IF_CROP:
+        input_shape = (NIH, NIW, IZ)
+    else:
+        input_shape = (IH, IW, IZ)
+
     model = keras.Sequential()
     model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3),
                                      activation='relu',
-                                     input_shape=(IH, IW, IZ)))
+                                     input_shape=input_shape))
     model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu'))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
     model.add(tf.keras.layers.BatchNormalization())
@@ -130,6 +158,7 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
     lt = keras.losses.categorical_crossentropy
     model.compile(optimizer='adam',
                   loss=lt, metrics=['accuracy'])
+
     model.fit(x, y, batch_size=100, epochs=eps)
 
     return model
@@ -173,11 +202,21 @@ def preprocessData(raw):
         xTestP = xTest.reshape((xTest.shape[0], IH, IW, IZ))
     yTrainP = to_categorical(yTrain, NUM_CLASSES)
     yTestP = to_categorical(yTest, NUM_CLASSES)
-    print("New shape of xTrain dataset: %s." % str(xTrainP.shape))
-    print("New shape of xTest dataset: %s." % str(xTestP.shape))
-    print("New shape of yTrain dataset: %s." % str(yTrainP.shape))
-    print("New shape of yTest dataset: %s." % str(yTestP.shape))
-    return ((xTrainP, yTrainP), (xTestP, yTestP))
+
+    if DATASET != "mnist_d" and DATASET != "mnist_f":
+        xTrainPP, yTrainPP = cifar_preprocess(xTrainP, yTrainP)
+        xTestPP, yTestPP = cifar_preprocess(xTestP, yTestP)
+        print("New shape of xTrain dataset: %s." % str(xTrainPP.shape))
+        print("New shape of xTest dataset: %s." % str(xTestPP.shape))
+        print("New shape of yTrain dataset: %s." % str(yTrainPP.shape))
+        print("New shape of yTest dataset: %s." % str(yTestPP.shape))
+        return ((xTrainPP, yTrainPP), (xTestPP, yTestPP))
+    else:
+        print("New shape of xTrain dataset: %s." % str(xTrainP.shape))
+        print("New shape of xTest dataset: %s." % str(xTestP.shape))
+        print("New shape of yTrain dataset: %s." % str(yTrainP.shape))
+        print("New shape of yTest dataset: %s." % str(yTestP.shape))
+        return ((xTrainP, yTrainP), (xTestP, yTestP))
 
 
 def trainModel(data):
