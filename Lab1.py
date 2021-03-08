@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import tensorflow as tf
@@ -16,15 +15,15 @@ tf.random.set_seed(1618)
 # tf.logging.set_verbosity(tf.logging.ERROR)   # Uncomment for TF1.
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-#ALGORITHM = "guesser"
-ALGORITHM = "tf_net"
-#ALGORITHM = "tf_conv"
+# ALGORITHM = "guesser"
+# ALGORITHM = "tf_net"
+ALGORITHM = "tf_conv"
 
 DATASET = "mnist_d"
-#DATASET = "mnist_f"
-#DATASET = "cifar_10"
-#DATASET = "cifar_100_f"
-#DATASET = "cifar_100_c"
+# DATASET = "mnist_f"
+# DATASET = "cifar_10"
+# DATASET = "cifar_100_f"
+# DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
@@ -45,70 +44,6 @@ elif DATASET == "cifar_100_f":
 elif DATASET == "cifar_100_c":
     pass                                 # TODO: Add this case.
 
-
-class ANN_net():
-    def __init__(self, inputSize, outputSize, neuronsPerLayer, learningRate=0.1):
-        self.inputSize = inputSize
-        self.outputSize = outputSize
-        self.neuronsPerLayer = neuronsPerLayer
-        self.lr = learningRate
-        self.W1 = np.random.randn(self.inputSize, self.neuronsPerLayer)
-        self.W2 = np.random.randn(self.neuronsPerLayer, self.outputSize)
-
-    # Activation function.
-    def __sigmoid(self, x):
-        return 1/(1 + np.exp(-x))
-
-    # Activation prime function.
-    def __sigmoidDerivative(self, x):
-        fx = self.__sigmoid(x)
-        return fx * (1-fx)
-    # Batch generator for mini-batches. Not randomized.
-
-    def __batchGenerator(self, l, n):
-        for i in range(0, len(l), n):
-            yield l[i: i + n]
-
-    # Training with backpropagation.
-    def train(self, xVals, yVals, epochs=100000, minibatches=True, mbs=200):
-        x_batches = self.__batchGenerator(xVals, mbs)
-        y_batches = self.__batchGenerator(yVals, mbs)
-        for i in range(0, epochs):
-            if minibatches is True:
-                for x_b, y_b in zip(x_batches, y_batches):
-                    L1out, L2out = self.__forward(x_b)
-                    L2error = L2out - y_b
-                    L2delta = L2error * self.__sigmoidDerivative(L2out)
-                    L1error = np.dot(L2delta, self.W2.T)
-                    L1delta = L1error * self.__sigmoidDerivative(L1out)
-                    self.W1 -= x_b.T.dot(L1delta) * \
-                        self.lr * math.exp(-0.1 * i)
-                    self.W2 -= L1out.T.dot(L2delta) * \
-                        self.lr * math.exp(-0.1 * i)
-            else:
-                for img in range(0, xVals.shape[0]):
-                    L1out, L2out = self.__forward(xVals[img])
-                    L2error = L2out - yVals[img]
-                    L2delta = L2error * self.__sigmoidDerivative(L2out)
-                    L1error = np.dot(L2delta, self.W2.T)
-                    L1delta = L1error * self.__sigmoidDerivative(L1out)
-                    self.W1 -= xVals[img].T.dot(L1delta) * \
-                        self.lr * math.exp(-0.1 * i)
-                    self.W2 -= L1out.T.dot(L2delta) * \
-                        self.lr * math.exp(-0.1 * i)
-
-    # Forward pass.
-
-    def __forward(self, input):
-        layer1 = self.__sigmoid(np.dot(input, self.W1))
-        layer2 = self.__sigmoid(np.dot(layer1, self.W2))
-        return layer1, layer2
-
-    # Predict.
-    def predict(self, xVals):
-        _, layer2 = self.__forward(xVals)
-        return layer2
-
 # =========================<Classifier Functions>================================
 
 
@@ -122,14 +57,56 @@ def guesserClassifier(xTest):
 
 
 def buildTFNeuralNet(x, y, eps=6):
-    ret = ANN_net(IS, NUM_CLASSES, 128)
-    ret.train(x, y, eps)
-    return ret
+    print("Building and training TFNet (ANN-style).")
+    model = keras.Sequential()
+    model.add(tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu))
+    model.add(tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu))
+    model.add(tf.keras.layers.Dense(128, activation=tf.nn.leaky_relu))
+    model.add(tf.keras.layers.Dense(64, activation=tf.nn.leaky_relu))
+    model.add(tf.keras.layers.Dense(32, activation=tf.nn.leaky_relu))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.leaky_relu))
+    model.add(tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax))
+    lt = keras.losses.categorical_crossentropy
+    model.compile(optimizer='adam',
+                  loss=lt, metrics=['accuracy'])
+    model.fit(x, y, eps)
+    return model
 
 
 def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
-    pass  # TODO: Implement a CNN here. dropout option is required.
-    return None
+    print("Building and training TFNet (CNN-style).")
+    model = keras.Sequential()
+    model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3),
+                                     activation='relu',
+                                     input_shape=(IH, IW, IZ)))
+    model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
+    model.add(tf.keras.layers.BatchNormalization())
+    if dropout:
+        model.add(tf.keras.layers.Dropout(dropRate))
+
+    model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
+    model.add(tf.keras.layers.BatchNormalization())
+    if dropout:
+        model.add(tf.keras.layers.Dropout(dropRate))
+
+    model.add(tf.keras.layers.Flatten())
+    model.add(tf.keras.layers.Dense(2048, activation='relu'))
+    model.add(tf.keras.layers.BatchNormalization())
+    if dropout:
+        model.add(tf.keras.layers.Dropout(dropRate/2))
+    model.add(tf.keras.layers.Dense(128, activation='relu'))
+    model.add(tf.keras.layers.BatchNormalization())
+
+    model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
+    lt = keras.losses.categorical_crossentropy
+    model.compile(optimizer='adam',
+                  loss=lt, metrics=['accuracy'])
+    model.fit(x, y, eps)
+
+    return model
 
 # =========================<Pipeline Functions>==================================
 
