@@ -21,9 +21,9 @@ ALGORITHM = "tf_conv"
 
 #DATASET = "mnist_d"
 #DATASET = "mnist_f"
-DATASET = "cifar_10"
+#DATASET = "cifar_10"
 # DATASET = "cifar_100_f"
-# DATASET = "cifar_100_c"
+DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
@@ -44,9 +44,17 @@ elif DATASET == "cifar_10":
     IZ = 3
     IS = 3072
 elif DATASET == "cifar_100_f":
-    pass                                 # TODO: Add this case.
+    NUM_CLASSES = 100
+    IH = 32
+    IW = 32
+    IZ = 3
+    IS = 3072
 elif DATASET == "cifar_100_c":
-    pass                                 # TODO: Add this case.
+    NUM_CLASSES = 20
+    IH = 32
+    IW = 32
+    IZ = 3
+    IS = 3072
 
 # =========================<Classifier Functions>================================
 
@@ -107,7 +115,7 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
     lt = keras.losses.categorical_crossentropy
     model.compile(optimizer='adam',
                   loss=lt, metrics=['accuracy'])
-    model.fit(x, y, batch_size=30, epochs=eps)
+    model.fit(x, y, batch_size=100, epochs=eps)
 
     return model
 
@@ -125,9 +133,11 @@ def getRawData():
         cifar = tf.keras.datasets.cifar10
         (xTrain, yTrain), (xTest, yTest) = cifar.load_data()
     elif DATASET == "cifar_100_f":
-        pass      # TODO: Add this case.
+        cifar = tf.keras.datasets.cifar100
+        (xTrain, yTrain), (xTest, yTest) = cifar.load_data(label_mode="fine")
     elif DATASET == "cifar_100_c":
-        pass      # TODO: Add this case.
+        cifar = tf.keras.datasets.cifar100
+        (xTrain, yTrain), (xTest, yTest) = cifar.load_data(label_mode="coarse")
     else:
         raise ValueError("Dataset not recognized.")
     print("Dataset: %s" % DATASET)
