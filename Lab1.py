@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.utils import to_categorical
 import math
+import numpy
 import random
 
 
@@ -19,11 +20,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # ALGORITHM = "tf_net"
 ALGORITHM = "tf_conv"
 
-#DATASET = "mnist_d"
-#DATASET = "mnist_f"
-#DATASET = "cifar_10"
-# DATASET = "cifar_100_f"
-DATASET = "cifar_100_c"
+# DATASET = "mnist_d"
+# DATASET = "mnist_f"
+# DATASET = "cifar_10"
+DATASET = "cifar_100_f"
+# DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
@@ -39,22 +40,38 @@ elif DATASET == "mnist_f":
     IS = 784
 elif DATASET == "cifar_10":
     NUM_CLASSES = 10
+    NIH = 28
+    NIW = 28
     IH = 32
     IW = 32
     IZ = 3
     IS = 3072
 elif DATASET == "cifar_100_f":
     NUM_CLASSES = 100
+    NIH = 28
+    NIW = 28
     IH = 32
     IW = 32
     IZ = 3
     IS = 3072
 elif DATASET == "cifar_100_c":
     NUM_CLASSES = 20
+    NIH = 28
+    NIW = 28
     IH = 32
     IW = 32
     IZ = 3
     IS = 3072
+
+IF_CROP = True
+
+
+def random_crop(image):
+    cropped_image = tf.image.random_crop(
+        image, size=[NIH, NIW, IZ])
+
+    return cropped_image
+
 
 # =========================<Classifier Functions>================================
 
@@ -69,7 +86,6 @@ def guesserClassifier(xTest):
 
 
 def buildTFNeuralNet(x, y, eps=6):
-    print("Building and training TFNet (ANN-style).")
     model = keras.Sequential()
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu))
@@ -86,7 +102,6 @@ def buildTFNeuralNet(x, y, eps=6):
 
 
 def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
-    print("Building and training TFNet (CNN-style).")
     model = keras.Sequential()
     model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3),
                                      activation='relu',
@@ -192,6 +207,7 @@ def runModel(data, model):
         return preds
     elif ALGORITHM == "tf_conv":
         print("Testing TF_CNN.")
+
         preds = model.predict(data)
         for i in range(preds.shape[0]):
             oneHot = [0] * NUM_CLASSES
@@ -203,7 +219,7 @@ def runModel(data, model):
 
 
 def evalResults(data, preds):
-    xTest, yTest = data
+    _, yTest = data
     acc = 0
     for i in range(preds.shape[0]):
         if np.array_equal(preds[i], yTest[i]):
