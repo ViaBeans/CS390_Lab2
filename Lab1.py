@@ -19,9 +19,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # ALGORITHM = "tf_net"
 ALGORITHM = "tf_conv"
 
-DATASET = "mnist_d"
+#DATASET = "mnist_d"
 #DATASET = "mnist_f"
-# DATASET = "cifar_10"
+DATASET = "cifar_10"
 # DATASET = "cifar_100_f"
 # DATASET = "cifar_100_c"
 
@@ -38,7 +38,11 @@ elif DATASET == "mnist_f":
     IZ = 1
     IS = 784
 elif DATASET == "cifar_10":
-    pass                                 # TODO: Add this case.
+    NUM_CLASSES = 10
+    IH = 32
+    IW = 32
+    IZ = 3
+    IS = 3072
 elif DATASET == "cifar_100_f":
     pass                                 # TODO: Add this case.
 elif DATASET == "cifar_100_c":
@@ -49,7 +53,7 @@ elif DATASET == "cifar_100_c":
 
 def guesserClassifier(xTest):
     ans = []
-    for entry in xTest:
+    for _ in xTest:
         pred = [0] * NUM_CLASSES
         pred[random.randint(0, 9)] = 1
         ans.append(pred)
@@ -118,7 +122,8 @@ def getRawData():
         mnist = tf.keras.datasets.fashion_mnist
         (xTrain, yTrain), (xTest, yTest) = mnist.load_data()
     elif DATASET == "cifar_10":
-        pass      # TODO: Add this case.
+        cifar = tf.keras.datasets.cifar10
+        (xTrain, yTrain), (xTest, yTest) = cifar.load_data()
     elif DATASET == "cifar_100_f":
         pass      # TODO: Add this case.
     elif DATASET == "cifar_100_c":
