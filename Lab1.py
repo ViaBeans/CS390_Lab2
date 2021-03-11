@@ -6,6 +6,7 @@ from tensorflow.keras.utils import to_categorical
 import math
 import numpy
 import random
+import sys
 
 
 random.seed(1618)
@@ -18,12 +19,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # ALGORITHM = "guesser"
 # ALGORITHM = "tf_net"
-ALGORITHM = "tf_conv"
+ALGORITHM = str(sys.argv[1])
+DATASET = str(sys.argv[2])
 
-DATASET = "mnist_d"
+# DATASET = "mnist_d"
 # DATASET = "mnist_f"
-# DATASET = "cifar_10"
-#DATASET = "cifar_100_f"
+# DATASET = "cifar_100_f"
 # DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
@@ -120,7 +121,7 @@ def buildTFNeuralNet(x, y, eps=6):
     lt = keras.losses.categorical_crossentropy
     model.compile(optimizer='adam',
                   loss=lt, metrics=['accuracy'])
-    model.fit(x, y, eps)
+    model.fit(x, y, batch_size=30, epochs=eps)
     return model
 
 
@@ -131,25 +132,48 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
         input_shape = (IH, IW, IZ)
 
     model = keras.Sequential()
-    model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3),
+
+    model.add(tf.keras.layers.Conv2D(64, kernel_size=(3, 3),
                                      activation='relu',
-                                     input_shape=input_shape))
-    model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu'))
+                                     input_shape=input_shape, padding="valid"))
+
+    if DATASET != "mnist_d":
+        model.add(tf.keras.layers.Conv2D(
+            64, (3, 3), activation='relu', padding="valid"))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
-    model.add(tf.keras.layers.BatchNormalization())
-
-    model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
-    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
-    model.add(tf.keras.layers.BatchNormalization())
-
-    model.add(tf.keras.layers.Flatten())
-
-    model.add(tf.keras.layers.Dense(1024, activation='relu'))
+    # if DATASET != "mnist_f" and DATASET != "cifar_10":
     model.add(tf.keras.layers.BatchNormalization())
     if dropout:
         model.add(tf.keras.layers.Dropout(dropRate))
 
+    model.add(tf.keras.layers.Conv2D(
+        128, (3, 3), activation='relu', padding="valid"))
+    if DATASET != "mnist_d":
+        model.add(tf.keras.layers.Conv2D(
+            128, (3, 3), activation='relu', padding="valid"))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=2))
+    # if DATASET != "mnist_f" and DATASET != "cifar_10":
+    model.add(tf.keras.layers.BatchNormalization())
+    if dropout:
+        model.add(tf.keras.layers.Dropout(dropRate))
+
+    model.add(tf.keras.layers.Flatten())
+
+    model.add(tf.keras.layers.Dense(512, activation='relu'))
+    # if DATASET != "mnist_f" and DATASET != "cifar_10":
+    model.add(tf.keras.layers.BatchNormalization())
+    if dropout:
+        model.add(tf.keras.layers.Dropout(dropRate))
+
+    if DATASET != "mnist_d":
+        model.add(tf.keras.layers.Dense(512, activation='relu'))
+        # if DATASET != "mnist_f" and DATASET != "cifar_10":
+        model.add(tf.keras.layers.BatchNormalization())
+        if dropout:
+            model.add(tf.keras.layers.Dropout(dropRate))
+
     model.add(tf.keras.layers.Dense(128, activation='relu'))
+    # if DATASET != "mnist_f" and DATASET != "cifar_10":
     model.add(tf.keras.layers.BatchNormalization())
     if dropout:
         model.add(tf.keras.layers.Dropout(dropRate))
@@ -158,8 +182,11 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
     lt = keras.losses.categorical_crossentropy
     model.compile(optimizer='adam',
                   loss=lt, metrics=['accuracy'])
+    if IF_CROP:
+        model.fit(x, y, batch_size=90, epochs=eps)
+    else:
 
-    model.fit(x, y, batch_size=100, epochs=eps)
+        model.fit(x, y, batch_size=30, epochs=eps)
 
     return model
 
@@ -197,26 +224,23 @@ def preprocessData(raw):
     if ALGORITHM != "tf_conv":
         xTrainP = xTrain.reshape((xTrain.shape[0], IS))
         xTestP = xTest.reshape((xTest.shape[0], IS))
+        yTrainP = to_categorical(yTrain, NUM_CLASSES)
+        yTestP = to_categorical(yTest, NUM_CLASSES)
+
     else:
         xTrainP = xTrain.reshape((xTrain.shape[0], IH, IW, IZ))
         xTestP = xTest.reshape((xTest.shape[0], IH, IW, IZ))
-    yTrainP = to_categorical(yTrain, NUM_CLASSES)
-    yTestP = to_categorical(yTest, NUM_CLASSES)
+        yTrainP = to_categorical(yTrain, NUM_CLASSES)
+        yTestP = to_categorical(yTest, NUM_CLASSES)
+        if DATASET != "mnist_d" and DATASET != "mnist_f":
+            xTrainP, yTrainP = cifar_preprocess(xTrainP, yTrainP)
+            xTestP, yTestP = cifar_preprocess(xTestP, yTestP)
 
-    if DATASET != "mnist_d" and DATASET != "mnist_f":
-        xTrainPP, yTrainPP = cifar_preprocess(xTrainP, yTrainP)
-        xTestPP, yTestPP = cifar_preprocess(xTestP, yTestP)
-        print("New shape of xTrain dataset: %s." % str(xTrainPP.shape))
-        print("New shape of xTest dataset: %s." % str(xTestPP.shape))
-        print("New shape of yTrain dataset: %s." % str(yTrainPP.shape))
-        print("New shape of yTest dataset: %s." % str(yTestPP.shape))
-        return ((xTrainPP, yTrainPP), (xTestPP, yTestPP))
-    else:
-        print("New shape of xTrain dataset: %s." % str(xTrainP.shape))
-        print("New shape of xTest dataset: %s." % str(xTestP.shape))
-        print("New shape of yTrain dataset: %s." % str(yTrainP.shape))
-        print("New shape of yTest dataset: %s." % str(yTestP.shape))
-        return ((xTrainP, yTrainP), (xTestP, yTestP))
+    print("New shape of xTrain dataset: %s." % str(xTrainP.shape))
+    print("New shape of xTest dataset: %s." % str(xTestP.shape))
+    print("New shape of yTrain dataset: %s." % str(yTrainP.shape))
+    print("New shape of yTest dataset: %s." % str(yTestP.shape))
+    return ((xTrainP, yTrainP), (xTestP, yTestP))
 
 
 def trainModel(data):

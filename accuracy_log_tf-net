@@ -1,0 +1,134 @@
+❯ python Lab1.py tf_net mnist_d
+Dataset: mnist_d
+Shape of xTrain dataset: (60000, 28, 28).
+Shape of yTrain dataset: (60000,).
+Shape of xTest dataset: (10000, 28, 28).
+Shape of yTest dataset: (10000,).
+New shape of xTrain dataset: (60000, 784).
+New shape of xTest dataset: (10000, 784).
+New shape of yTrain dataset: (60000, 10).
+New shape of yTest dataset: (10000, 10).
+Building and training TF_NN.
+Epoch 1/6
+2000/2000 [==============================] - 14s 5ms/step - loss: 0.9245 - accuracy: 0.8333 
+Epoch 2/6
+2000/2000 [==============================] - 10s 5ms/step - loss: 0.1863 - accuracy: 0.9467
+Epoch 3/6
+2000/2000 [==============================] - 11s 5ms/step - loss: 0.1532 - accuracy: 0.9568
+Epoch 4/6
+2000/2000 [==============================] - 11s 5ms/step - loss: 0.1359 - accuracy: 0.9627
+Epoch 5/6
+2000/2000 [==============================] - 12s 6ms/step - loss: 0.1256 - accuracy: 0.9654
+Epoch 6/6
+2000/2000 [==============================] - 11s 6ms/step - loss: 0.1098 - accuracy: 0.9700
+Testing TF_NN.
+Classifier algorithm: tf_net
+Classifier accuracy: 96.940000%
+
+❯ python Lab1.py tf_net mnist_f
+Dataset: mnist_f
+Shape of xTrain dataset: (60000, 28, 28).
+Shape of yTrain dataset: (60000,).
+Shape of xTest dataset: (10000, 28, 28).
+Shape of yTest dataset: (10000,).
+New shape of xTrain dataset: (60000, 784).
+New shape of xTest dataset: (10000, 784).
+New shape of yTrain dataset: (60000, 10).
+New shape of yTest dataset: (10000, 10).
+Building and training TF_NN.
+Epoch 1/6
+2000/2000 [==============================] - 15s 5ms/step - loss: 2.6508 - accuracy: 0.7054 
+Epoch 2/6
+2000/2000 [==============================] - 11s 5ms/step - loss: 0.4716 - accuracy: 0.8320
+Epoch 3/6
+2000/2000 [==============================] - 12s 6ms/step - loss: 0.4254 - accuracy: 0.8478
+Epoch 4/6
+2000/2000 [==============================] - 11s 6ms/step - loss: 0.4243 - accuracy: 0.8483
+Epoch 5/6
+2000/2000 [==============================] - 11s 5ms/step - loss: 0.4148 - accuracy: 0.8545
+Epoch 6/6
+2000/2000 [==============================] - 10s 5ms/step - loss: 0.4049 - accuracy: 0.8575
+Testing TF_NN.
+Classifier algorithm: tf_net
+Classifier accuracy: 86.260000%
+
+❯ python Lab1.py tf_net cifar_10
+Dataset: cifar_10
+Shape of xTrain dataset: (50000, 32, 32, 3).
+Shape of yTrain dataset: (50000, 1).
+Shape of xTest dataset: (10000, 32, 32, 3).
+Shape of yTest dataset: (10000, 1).
+New shape of xTrain dataset: (50000, 3072).
+New shape of xTest dataset: (10000, 3072).
+New shape of yTrain dataset: (50000, 10).
+New shape of yTest dataset: (10000, 10).
+Building and training TF_NN.
+Epoch 1/6
+1667/1667 [==============================] - 16s 7ms/step - loss: 12.1213 - accuracy: 0.1977
+Epoch 2/6
+1667/1667 [==============================] - 12s 7ms/step - loss: 1.9801 - accuracy: 0.2994
+Epoch 3/6
+1667/1667 [==============================] - 11s 7ms/step - loss: 1.8568 - accuracy: 0.3361
+Epoch 4/6
+1667/1667 [==============================] - 14s 8ms/step - loss: 1.8163 - accuracy: 0.3530
+Epoch 5/6
+1667/1667 [==============================] - 14s 8ms/step - loss: 1.7709 - accuracy: 0.3675
+Epoch 6/6
+1667/1667 [==============================] - 14s 8ms/step - loss: 1.7553 - accuracy: 0.3690
+Testing TF_NN.
+Classifier algorithm: tf_net
+Classifier accuracy: 38.070000%
+
+❯ python Lab1.py tf_net cifar_100_c
+Dataset: cifar_100_c
+Shape of xTrain dataset: (50000, 32, 32, 3).
+Shape of yTrain dataset: (50000, 1).
+Shape of xTest dataset: (10000, 32, 32, 3).
+Shape of yTest dataset: (10000, 1).
+New shape of xTrain dataset: (50000, 3072).
+New shape of xTest dataset: (10000, 3072).
+New shape of yTrain dataset: (50000, 20).
+New shape of yTest dataset: (10000, 20).
+Building and training TF_NN.
+Epoch 1/6
+1667/1667 [==============================] - 19s 8ms/step - loss: 12.6121 - accuracy: 0.0889
+Epoch 2/6
+1667/1667 [==============================] - 14s 8ms/step - loss: 2.7378 - accuracy: 0.1581
+Epoch 3/6
+1667/1667 [==============================] - 14s 8ms/step - loss: 2.6202 - accuracy: 0.1899
+Epoch 4/6
+1667/1667 [==============================] - 11s 7ms/step - loss: 2.5641 - accuracy: 0.2061
+Epoch 5/6
+1667/1667 [==============================] - 13s 8ms/step - loss: 2.5203 - accuracy: 0.2229
+Epoch 6/6
+1667/1667 [==============================] - 13s 8ms/step - loss: 12.2171 - accuracy: 0.1749
+Testing TF_NN.
+Classifier algorithm: tf_net
+Classifier accuracy: 13.430000%
+
+❯ python Lab1.py tf_net cifar_100_f
+Dataset: cifar_100_f
+Shape of xTrain dataset: (50000, 32, 32, 3).
+Shape of yTrain dataset: (50000, 1).
+Shape of xTest dataset: (10000, 32, 32, 3).
+Shape of yTest dataset: (10000, 1).
+New shape of xTrain dataset: (50000, 3072).
+New shape of xTest dataset: (10000, 3072).
+New shape of yTrain dataset: (50000, 100).
+New shape of yTest dataset: (10000, 100).
+Building and training TF_NN.
+Epoch 1/6
+1667/1667 [==============================] - 20s 8ms/step - loss: 9.1996 - accuracy: 0.0134 
+Epoch 2/6
+1667/1667 [==============================] - 13s 8ms/step - loss: 4.3265 - accuracy: 0.0482
+Epoch 3/6
+1667/1667 [==============================] - 10s 6ms/step - loss: 4.0588 - accuracy: 0.0768
+Epoch 4/6
+1667/1667 [==============================] - 10s 6ms/step - loss: 3.9696 - accuracy: 0.0891
+Epoch 5/6
+1667/1667 [==============================] - 11s 6ms/step - loss: 3.9227 - accuracy: 0.0963
+Epoch 6/6
+1667/1667 [==============================] - 11s 6ms/step - loss: 3.8391 - accuracy: 0.1109
+Testing TF_NN.
+Classifier algorithm: tf_net
+Classifier accuracy: 11.980000%

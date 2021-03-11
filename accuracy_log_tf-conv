@@ -1,0 +1,174 @@
+❯ python Lab1.py tf_conv mnist_d
+Dataset: mnist_d
+Shape of xTrain dataset: (60000, 28, 28).
+Shape of yTrain dataset: (60000,).
+Shape of xTest dataset: (10000, 28, 28).
+Shape of yTest dataset: (10000,).
+New shape of xTrain dataset: (60000, 28, 28, 1).
+New shape of xTest dataset: (10000, 28, 28, 1).
+New shape of yTrain dataset: (60000, 10).
+New shape of yTest dataset: (10000, 10).
+Building and training TF_CNN.
+Epoch 1/10
+2000/2000 [==============================] - 72s 35ms/step - loss: 0.2229 - accuracy: 0.9333
+Epoch 2/10
+2000/2000 [==============================] - 74s 37ms/step - loss: 0.0686 - accuracy: 0.9782
+Epoch 3/10
+2000/2000 [==============================] - 72s 36ms/step - loss: 0.0506 - accuracy: 0.9848
+Epoch 4/10
+2000/2000 [==============================] - 73s 37ms/step - loss: 0.0421 - accuracy: 0.9873
+Epoch 5/10
+2000/2000 [==============================] - 71s 35ms/step - loss: 0.0342 - accuracy: 0.9896
+Epoch 6/10
+2000/2000 [==============================] - 69s 34ms/step - loss: 0.0288 - accuracy: 0.9908
+Epoch 7/10
+2000/2000 [==============================] - 69s 34ms/step - loss: 0.0294 - accuracy: 0.9908
+Epoch 8/10
+2000/2000 [==============================] - 69s 35ms/step - loss: 0.0239 - accuracy: 0.9924
+Epoch 9/10
+2000/2000 [==============================] - 68s 34ms/step - loss: 0.0204 - accuracy: 0.9936
+Epoch 10/10
+2000/2000 [==============================] - 68s 34ms/step - loss: 0.0195 - accuracy: 0.9939
+Testing TF_CNN.
+Classifier algorithm: tf_conv
+Classifier accuracy: 99.430000%
+
+❯ python Lab1.py tf_conv mnist_f
+Dataset: mnist_f
+Shape of xTrain dataset: (60000, 28, 28).
+Shape of yTrain dataset: (60000,).
+Shape of xTest dataset: (10000, 28, 28).
+Shape of yTest dataset: (10000,).
+New shape of xTrain dataset: (60000, 28, 28, 1).
+New shape of xTest dataset: (10000, 28, 28, 1).
+New shape of yTrain dataset: (60000, 10).
+New shape of yTest dataset: (10000, 10).
+Building and training TF_CNN.
+Epoch 1/10
+2000/2000 [==============================] - 152s 75ms/step - loss: 0.6639 - accuracy: 0.7660
+Epoch 2/10
+2000/2000 [==============================] - 157s 79ms/step - loss: 0.3501 - accuracy: 0.8743
+Epoch 3/10
+2000/2000 [==============================] - 161s 80ms/step - loss: 0.2864 - accuracy: 0.8965
+Epoch 4/10
+2000/2000 [==============================] - 162s 81ms/step - loss: 0.2602 - accuracy: 0.9066
+Epoch 5/10
+2000/2000 [==============================] - 183s 91ms/step - loss: 0.2297 - accuracy: 0.9197
+Epoch 6/10
+2000/2000 [==============================] - 186s 93ms/step - loss: 0.2120 - accuracy: 0.9242
+Epoch 7/10
+2000/2000 [==============================] - 185s 92ms/step - loss: 0.1961 - accuracy: 0.9269
+Epoch 8/10
+2000/2000 [==============================] - 191s 96ms/step - loss: 0.1837 - accuracy: 0.9340
+Epoch 9/10
+2000/2000 [==============================] - 242s 121ms/step - loss: 0.1642 - accuracy: 0.9415
+Epoch 10/10
+2000/2000 [==============================] - 202s 101ms/step - loss: 0.1522 - accuracy: 0.9445
+Testing TF_CNN.
+Classifier algorithm: tf_conv
+Classifier accuracy: 92.940000%
+
+❯ python Lab1.py tf_conv cifar_10
+Dataset: cifar_10
+Shape of xTrain dataset: (50000, 32, 32, 3).
+Shape of yTrain dataset: (50000, 1).
+Shape of xTest dataset: (10000, 32, 32, 3).
+Shape of yTest dataset: (10000, 1).
+New shape of xTrain dataset: (50000, 32, 32, 3).
+New shape of xTest dataset: (10000, 32, 32, 3).
+New shape of yTrain dataset: (50000, 10).
+New shape of yTest dataset: (10000, 10).
+Building and training TF_CNN.
+Epoch 1/10
+1667/1667 [==============================] - 173s 103ms/step - loss: 1.8012 - accuracy: 0.3819
+Epoch 2/10
+1667/1667 [==============================] - 166s 100ms/step - loss: 1.0382 - accuracy: 0.6377
+Epoch 3/10
+1667/1667 [==============================] - 167s 100ms/step - loss: 0.8580 - accuracy: 0.7005
+Epoch 4/10
+1667/1667 [==============================] - 174s 105ms/step - loss: 0.7271 - accuracy: 0.7501
+Epoch 5/10
+1667/1667 [==============================] - 177s 106ms/step - loss: 0.6447 - accuracy: 0.7792
+Epoch 6/10
+1667/1667 [==============================] - 180s 108ms/step - loss: 0.5712 - accuracy: 0.8034
+Epoch 7/10
+1667/1667 [==============================] - 184s 111ms/step - loss: 0.5106 - accuracy: 0.8263
+Epoch 8/10
+1667/1667 [==============================] - 185s 111ms/step - loss: 0.4519 - accuracy: 0.8432
+Epoch 9/10
+1667/1667 [==============================] - 189s 113ms/step - loss: 0.4046 - accuracy: 0.8587
+Epoch 10/10
+1667/1667 [==============================] - 189s 113ms/step - loss: 0.3628 - accuracy: 0.8750
+Testing TF_CNN.
+Classifier algorithm: tf_conv
+Classifier accuracy: 79.780000%
+
+❯ python Lab1.py tf_conv cifar_100_c
+Dataset: cifar_100_c
+Shape of xTrain dataset: (50000, 32, 32, 3).
+Shape of yTrain dataset: (50000, 1).
+Shape of xTest dataset: (10000, 32, 32, 3).
+Shape of yTest dataset: (10000, 1).
+New shape of xTrain dataset: (150000, 28, 28, 3).
+New shape of xTest dataset: (30000, 28, 28, 3).
+New shape of yTrain dataset: (150000, 20).
+New shape of yTest dataset: (30000, 20).
+Building and training TF_CNN.
+Epoch 1/10
+1667/1667 [==============================] - 440s 262ms/step - loss: 2.5433 - accuracy: 0.2409
+Epoch 2/10
+1667/1667 [==============================] - 445s 267ms/step - loss: 1.6825 - accuracy: 0.4736
+Epoch 3/10
+1667/1667 [==============================] - 462s 277ms/step - loss: 1.4021 - accuracy: 0.5585
+Epoch 4/10
+1667/1667 [==============================] - 492s 295ms/step - loss: 1.2110 - accuracy: 0.6147
+Epoch 5/10
+1667/1667 [==============================] - 510s 306ms/step - loss: 1.0725 - accuracy: 0.6581
+Epoch 6/10
+1667/1667 [==============================] - 480s 288ms/step - loss: 0.9588 - accuracy: 0.6926
+Epoch 7/10
+1667/1667 [==============================] - 493s 296ms/step - loss: 0.8640 - accuracy: 0.7207
+Epoch 8/10
+1667/1667 [==============================] - 507s 304ms/step - loss: 0.7868 - accuracy: 0.7434
+Epoch 9/10
+1667/1667 [==============================] - 525s 315ms/step - loss: 0.7215 - accuracy: 0.7657
+Epoch 10/10
+1667/1667 [==============================] - 501s 301ms/step - loss: 0.6722 - accuracy: 0.7799
+Testing TF_CNN.
+Classifier algorithm: tf_conv
+Classifier accuracy: 62.593333%
+
+❯ python Lab1.py tf_conv cifar_100_f
+Dataset: cifar_100_f
+Shape of xTrain dataset: (50000, 32, 32, 3).
+Shape of yTrain dataset: (50000, 1).
+Shape of xTest dataset: (10000, 32, 32, 3).
+Shape of yTest dataset: (10000, 1).
+New shape of xTrain dataset: (150000, 28, 28, 3).
+New shape of xTest dataset: (30000, 28, 28, 3).
+New shape of yTrain dataset: (150000, 100).
+New shape of yTest dataset: (30000, 100).
+Building and training TF_CNN.
+Epoch 1/10
+1667/1667 [==============================] - 395s 236ms/step - loss: 3.8607 - accuracy: 0.1264
+Epoch 2/10
+1667/1667 [==============================] - 443s 266ms/step - loss: 2.5900 - accuracy: 0.3356
+Epoch 3/10
+1667/1667 [==============================] - 453s 272ms/step - loss: 2.1612 - accuracy: 0.4273
+Epoch 4/10
+1667/1667 [==============================] - 485s 291ms/step - loss: 1.8993 - accuracy: 0.4826
+Epoch 5/10
+1667/1667 [==============================] - 516s 310ms/step - loss: 1.7097 - accuracy: 0.5278
+Epoch 6/10
+1667/1667 [==============================] - 482s 289ms/step - loss: 1.5530 - accuracy: 0.5641
+Epoch 7/10
+1667/1667 [==============================] - 488s 293ms/step - loss: 1.4335 - accuracy: 0.5926
+Epoch 8/10
+1667/1667 [==============================] - 508s 305ms/step - loss: 1.3345 - accuracy: 0.6150
+Epoch 9/10
+1667/1667 [==============================] - 521s 312ms/step - loss: 1.2453 - accuracy: 0.6369
+Epoch 10/10
+1667/1667 [==============================] - 541s 325ms/step - loss: 1.1815 - accuracy: 0.6549
+Testing TF_CNN.
+Classifier algorithm: tf_conv
+Classifier accuracy: 51.630000%
